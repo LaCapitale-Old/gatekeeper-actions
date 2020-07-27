@@ -1,0 +1,33 @@
+name: deployment
+on:
+  push:
+    branches:
+      - master
+jobs:
+  image:
+    name: Build Image
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set version
+      run: echo "::set-env name=APP_VERSION::$(cat .version)"
+
+    - name: Build and push Docker image to GitHub Package Registry
+      uses: docker/build-push-action@v1
+      with:
+        username: ${{ secrets.BOT_CREATE_PACKAGE_USERNAME }}
+        password: ${{ secrets.BOT_CREATE_PACKAGE_TOKEN }}
+        registry: docker.pkg.github.com
+        repository: lacapitale/gatekeeper-actions/gatekeeper-client
+        tags: v${{ env.APP_VERSION }}
+
+    - name: Build and push Docker image to Docker Hub
+      uses: docker/build-push-action@v1
+      with:
+        username: ${{ secrets.BOT_DOCKER_HUB_USERNAME }}
+        password: ${{ secrets.BOT_DOCKER_HUB_TOKEN }}
+        repository: lacapitale/gatekeeper-client
+        tags: v${{ env.APP_VERSION }}

@@ -1,0 +1,52 @@
+name: La Capitale Gatekeeper Helm
+author: simon.bernier@lacapitale.com
+description: Triggers the installation of the configured Helm chart into a Kubernetes cluster in either the `devl-gke` or `prod-gke` corporate projects.
+inputs:
+  gatekeeper-client-id:
+    description: The Gatekeeper client id.
+    required: true
+  gatekeeper-api-key:
+    description: The Gatekeeper API key to authorize the request.
+    required: true
+  ops-repo:
+    description: The URL, without the protocol, where the ops repository containing the Helm chart can be retrieved.
+    required: true
+  ops-repo-branch:
+    description: The ops repository's branch.
+    required: false
+    default: master
+  ops-repo-helm-chart-path:
+    description: The ops repository's path where the Helm chart is located, based on the repository's root.
+    required: false
+    default: "/"
+  ops-repo-helm-values-path:
+    description: The ops repository's path where the Helm values file is located, from the configured Helm chart's path.
+    required: false
+    default: "values.yaml"
+  helm-release-name:
+    description: The Helm release's name.
+    required: true
+  target-cluster:
+    description: The Kubernetes cluster where to deploy the application. Either "DEV" or "PROD".
+    required: true
+  target-namespace:
+    description: The Kubernetes namespace where to deploy the application.
+    required: true
+runs:
+  using: docker
+  image: docker://lacapitale/gatekeeper-client:v0.1.0
+  args:
+    - -serverURL=gatekeeper.infra1.lacapitale-gcp.com
+    - -serverPort=443
+    - -clientID=${{ inputs.gatekeeper-client-id }}
+    - -apiKey=${{ inputs.gatekeeper-api-key }}
+    - -logStreaming=true
+    - -grpcURL=gatekeeper-grpc.infra1.lacapitale-gcp.com
+    - -grpcPort=443
+    - -serviceType=HELM
+    - -configUrl=${{ inputs.ops-repo }}
+    - -branchName=${{ inputs.ops-repo-branch }}
+    - -runDir=${{ inputs.ops-repo-helm-chart-path }}
+    - -cluster=${{ inputs.target-cluster }}
+    - -releaseName=${{ inputs.helm-release-name }}
+    - -args=--namespace ${{ inputs.target-namespace }} --values ${{ inputs.ops-repo-helm-values-path }}

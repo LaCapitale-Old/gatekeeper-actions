@@ -1,0 +1,30 @@
+name: La Capitale Gatekeeper Image
+author: simon.bernier@lacapitale.com
+description: Triggers the pull of a Docker image through Gatekeeper.
+inputs:
+  gatekeeper-client-id:
+    description: The Gatekeeper client id.
+    required: true
+  gatekeeper-api-key:
+    description: The Gatekeeper API key to authorize the request.
+    required: true
+  source-registry:
+    description: The source registry where the image will be retrieved from. Either "GCR" or "GITHUB".
+    required: true
+  image-name:
+    description: The image name that should be pulled.
+    required: true
+runs:
+  using: docker
+  image: docker://lacapitale/gatekeeper-client:v0.1.0
+  args:
+    - -serverURL=gatekeeper.infra1.lacapitale-gcp.com
+    - -serverPort=443
+    - -clientID=${{ inputs.gatekeeper-client-id }}
+    - -apiKey=${{ inputs.gatekeeper-api-key }}
+    - -logStreaming=true
+    - -grpcURL=gatekeeper-grpc.infra1.lacapitale-gcp.com
+    - -grpcPort=443
+    - -serviceType=RELEASE_IMG
+    - -registryType=${{ inputs.source-registry }}
+    - -branchName=${{ inputs.image-name }}
