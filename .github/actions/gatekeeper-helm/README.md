@@ -46,7 +46,7 @@ None
 
 ## Example usage
 
-    uses: LaCapitale/gatekeeper-actions/.github/actions/gatekeeper-helm@v0.1.0
+    uses: LaCapitale/gatekeeper-actions/.github/actions/gatekeeper-helm@v0.1.1
     with:
       gatekeeper-client-id: client_id
       gatekeeper-api-key: ${{ secrets.GATEKEEPER_API_KEY }}
