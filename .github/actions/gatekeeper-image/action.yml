@@ -16,7 +16,7 @@ inputs:
     required: true
 runs:
   using: docker
-  image: docker://lacapitale/gatekeeper-client:v0.1.0
+  image: docker://lacapitale/gatekeeper-client:v0.1.1
   args:
     - -serverURL=gatekeeper.infra1.lacapitale-gcp.com
     - -serverPort=443
@@ -27,4 +27,4 @@ runs:
     - -grpcPort=443
     - -serviceType=RELEASE_IMG
     - -registryType=${{ inputs.source-registry }}
-    - -branchName=${{ inputs.image-name }}
+    - -imageName=${{ inputs.image-name }}

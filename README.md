@@ -12,7 +12,7 @@ Images are publicly stored in [Docker Hub](https://hub.docker.com/r/lacapitale/g
 
 To request Gatekeeper to pull the `gcr.io/project-id/image:tag` image into the corporate container registry:
 
-    docker run --rm lacapitale/gatekeeper-client:v0.1.0 \
+    docker run --rm lacapitale/gatekeeper-client:v0.1.1 \
       -serverURL=gatekeeper.infra1.lacapitale-gcp.com \
       -serverPort=443 \
       -clientID=$CLIENT_ID \
@@ -22,7 +22,7 @@ To request Gatekeeper to pull the `gcr.io/project-id/image:tag` image into the c
       -grpcPort=443 \
       -serviceType=RELEASE_IMG \
       -registryType=GCR \
-      -branchName=gcr.io/project-id/image:tag
+      -imageName=gcr.io/project-id/image:tag
 
 ## GitHub actions
 
@@ -38,7 +38,7 @@ See [the action](./.github/actions/gatekeeper-helm/README.md) for more informati
 
 The following deploys the Helm chart located at `github.com/LaCapitale/example/helm/example`:
 
-    uses: LaCapitale/gatekeeper-actions/.github/actions/gatekeeper-helm@v0.1.0
+    uses: LaCapitale/gatekeeper-actions/.github/actions/gatekeeper-helm@v0.1.1
     with:
       gatekeeper-client-id: client_id
       gatekeeper-api-key: ${{ secrets.GATEKEEPER_API_KEY }}
@@ -58,7 +58,7 @@ See [the action](./.github/actions/gatekeeper-image/README.md) for more informat
 
 The following does the same thing as the example in the Docker image section:
 
-    uses: LaCapitale/gatekeeper-actions/.github/actions/gatekeeper-helm@v0.1.0
+    uses: LaCapitale/gatekeeper-actions/.github/actions/gatekeeper-image@v0.1.1
     with:
       gatekeeper-client-id: client_id
       gatekeeper-api-key: ${{ secrets.GATEKEEPER_API_KEY }}
